@@ -1,5 +1,5 @@
 'use strict';
-
+let gmOvrSound = document.getElementById("gameOver");
 // The name of this view
 // Later, to render this view, call:
 // new GameBoardView(options).render(this.container)
@@ -250,6 +250,7 @@ class GameBoardView extends View {
       ).length;
     const win = this.totalCells === discoveredShips;
     if (win)
+      gmOvrSound.play();
       new GameOverView({
         win: playerCanWin,
       }).render(this.container);

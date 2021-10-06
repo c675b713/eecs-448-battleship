@@ -30,11 +30,11 @@ class GameOverView extends View {
   ) {
     await super.render(container);
     /* Display the appropriate lose/win message */
-    let gmOvrSound = document.getElementById("gameOver");
-    gmOvrSound.play();
+    
     this.container.getElementsByTagName('p')[0].textContent = this.options.win
       ? 'You Won!'
       : 'You Lost.';
+    
 
     /* Listen for "Play again" button click, Once button is clicked,call:
        new MainView().render(this.container) */
