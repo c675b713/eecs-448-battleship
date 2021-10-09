@@ -33,7 +33,8 @@ class GameBoardView extends View {
     container
   ) {
     await super.render(container);    
-    this.shipMissSound = new Audio("/eecs-448-battleship/lib/audio/shipMiss.mp3");
+    this.shipMissSound = document.querySelector("audio");
+    
     this.container.setAttribute('data-focus', 'dialog');
 
     /* Render your board */
@@ -144,10 +145,16 @@ class GameBoardView extends View {
       'Yes!',
       'no.',
       (isHit) => {
-        if (isHit) cell.classList.add('ship');
+        if (isHit){
+          // play sound here
+          var audio = new Audio('../../lib/audio/shipFire.mp3');
+          audio.play();
+          cell.classList.add('ship');
+        } 
         this.addBorder();
         if (!isHit || !this.checkWin('opponent')) {
-          this.shipMissSound.play();
+          var audio = new Audio('../../lib/audio/shipMiss.mp3');
+          audio.play();
           this.turn('player');
           
       }
@@ -256,10 +263,12 @@ class GameBoardView extends View {
         (cell) => cell.classList.contains('ship') && cell.children[0].disabled
       ).length;
     const win = this.totalCells === discoveredShips;
-    if (win)
+    if (win) {
+      // play sound here
       new GameOverView({
         win: playerCanWin,
       }).render(this.container);
+    }
     return win;
   }
 
