@@ -15,11 +15,11 @@ class GameBoardView extends View {
     super(options);
     this.totalCells = shipCellCount(this.options.numberOfShips);
   }
-
-  playSound(url) {
+  
+  /*playSound(url) {
     const audio = new Audio(url);
     audio.play();
-  }
+  }*/
   /**
    * Renders a defined view into a container. Passes in necessary, predefined
    * render parameters.
@@ -32,8 +32,8 @@ class GameBoardView extends View {
     // Container would be populated with elements from index.html
     container
   ) {
-    await super.render(container);
-
+    await super.render(container);    
+    this.shipMissSound = new Audio("/eecs-448-battleship/lib/audio/shipMiss.mp3");
     this.container.setAttribute('data-focus', 'dialog');
 
     /* Render your board */
@@ -147,7 +147,7 @@ class GameBoardView extends View {
         if (isHit) cell.classList.add('ship');
         this.addBorder();
         if (!isHit || !this.checkWin('opponent')) {
-          this.playSound('shipMiss.mp3');
+          this.shipMissSound.play();
           this.turn('player');
           
       }
