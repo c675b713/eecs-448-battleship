@@ -16,6 +16,10 @@ class GameBoardView extends View {
     this.totalCells = shipCellCount(this.options.numberOfShips);
   }
 
+  playSound(url) {
+    const audio = new Audio(url);
+    audio.play();
+  }
   /**
    * Renders a defined view into a container. Passes in necessary, predefined
    * render parameters.
@@ -142,11 +146,15 @@ class GameBoardView extends View {
       (isHit) => {
         if (isHit) cell.classList.add('ship');
         this.addBorder();
-        if (!isHit || !this.checkWin('opponent')) this.turn('player');
+        if (!isHit || !this.checkWin('opponent')) {
+          this.playSound('shipMiss.mp3');
+          this.turn('player');
+          
+      }
       }
     );
   }
-
+  
   /**   
    * Find ship on gameboard
    * @function findShip
@@ -249,7 +257,6 @@ class GameBoardView extends View {
       ).length;
     const win = this.totalCells === discoveredShips;
     if (win)
-      gmOvrSound.play();
       new GameOverView({
         win: playerCanWin,
       }).render(this.container);
