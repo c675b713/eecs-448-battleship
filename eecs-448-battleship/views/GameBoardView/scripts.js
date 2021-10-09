@@ -1,5 +1,4 @@
 'use strict';
-let gmOvrSound = document.getElementById("gameOver");
 // The name of this view
 // Later, to render this view, call:
 // new GameBoardView(options).render(this.container)
