@@ -41,7 +41,6 @@ class GameOverView extends View {
     this.button = this.container.getElementsByTagName('button')[0];
     this.onPlayAgain = () => new MainView().render(this.container);
     this.button.addEventListener('click', this.onPlayAgain);
-
     return this;
   }
 

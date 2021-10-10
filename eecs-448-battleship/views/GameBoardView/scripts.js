@@ -146,8 +146,7 @@ class GameBoardView extends View {
       'no.',
       (isHit) => {
         if (isHit){
-          // play sound here
-          var audio = new Audio('../../lib/audio/shipFire.mp3');
+          var audio = new Audio('../../lib/audio/shipHit.wav');
           audio.play();
           cell.classList.add('ship');
         } 
