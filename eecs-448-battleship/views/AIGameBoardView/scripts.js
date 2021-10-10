@@ -314,9 +314,17 @@ class AIGameBoardView extends View {
     //cell is the html element that represents the button on the page, it is the thing we actually have to change to make stuff show up on the web page
     
     var isHit = this.checkHitAI(row, col);
-    if (isHit) cell.classList.add('ship');
+    if (isHit) {
+      var audio = new Audio('../../lib/audio/shipFire.mp3');
+      audio.play();
+      cell.classList.add('ship');
+    }
     this.addBorder();
-    if (!isHit || !this.checkWin('opponent')) this.turn('player');
+    if (!isHit || !this.checkWin('opponent')) {
+      var audio = new Audio('../../lib/audio/shipMiss.mp3');
+      audio.play();
+      this.turn('player');
+    };
     //this.checkWin('opponent');
     
   }
