@@ -79,6 +79,16 @@ class AIGameBoardView extends View {
   }
 
   /**
+   * Sets up necessary information about the AI game
+   * @function setupAI
+   * @memberof AIGameBoardView
+   */
+  setupAI(){
+    this.AIBoard = this.makeAIBoard(this.options.numberOfShips);//I assume options.numberOfShips is 1-6 and not 1-21 for the number of cells
+    this.lastHitShip = null;
+  }
+
+  /**
    * Renders a defined view into a container. Passes in necessary, predefined
    * render parameters.
    * @async
@@ -145,13 +155,18 @@ class AIGameBoardView extends View {
     return (this.AIBoard[row][col] == 'x');
   }
 
+  /**
+   * function to have AI shoot at your board based on the difficulty of the game
+   * @function AIGuess
+   * @memberof AIGameBoardView
+   */
   AIGuess(){
     const board = this.playerBoard;
     var lastHitRow, lastHitColumn;
     if(this.options.difficulty == 'easy'){
       var playerCells = board.cells.flat().filter(
         (cell) => cell.children[0].disabled == false
-      );//list of all the ships we haven't shot at yet
+      );//list of all the cells we haven't shot at yet
       var guessCellNum = Math.floor(Math.random()*playerCells.length);
       (playerCells)[guessCellNum].children[0].disabled = true;
     }
@@ -160,7 +175,7 @@ class AIGameBoardView extends View {
       if(this.lastHitShip == null){
         var playerCells = board.cells.flat().filter(
           (cell) => cell.children[0].disabled == false
-        );//list of all the ships we haven't shot at yet
+        );//list of all the cells we haven't shot at yet
         var guessCellNum = Math.floor(Math.random()*playerCells.length);
         if((playerCells)[guessCellNum].classList.contains('ship')){
           this.lastHitShip = (playerCells)[guessCellNum];
@@ -236,6 +251,7 @@ class AIGameBoardView extends View {
     this.dialog.innerHTML = `<h2>${message}</h2>`;
     if(player == 'player'){
       this.AIGuess();
+      this.turn('opponent');
     }
     if(player === 'opponent'){
       this.container.setAttribute('data-focus', player);
@@ -298,9 +314,17 @@ class AIGameBoardView extends View {
     //cell is the html element that represents the button on the page, it is the thing we actually have to change to make stuff show up on the web page
     
     var isHit = this.checkHitAI(row, col);
-    if (isHit) cell.classList.add('ship');
+    if (isHit) {
+      var audio = new Audio('../../lib/audio/shipFire.mp3');
+      audio.play();
+      cell.classList.add('ship');
+    }
     this.addBorder();
-    if (!isHit || !this.checkWin('opponent')) this.turn('player');
+    if (!isHit || !this.checkWin('opponent')) {
+      var audio = new Audio('../../lib/audio/shipMiss.mp3');
+      audio.play();
+      this.turn('player');
+    };
     //this.checkWin('opponent');
     
   }
@@ -400,11 +424,6 @@ class AIGameBoardView extends View {
         win: playerCanWin,
       }).render(this.container);
     return win;
-  }
-
-  setupAI(){
-    this.AIBoard = this.makeAIBoard(this.options.numberOfShips);//I assume options.numberOfShips is 1-6 and not 1-21 for the number of cells
-    this.lastHitShip = null;
   }
 
   /**   
