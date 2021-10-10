@@ -78,6 +78,11 @@ class AIGameBoardView extends View {
     return AIShips;
   }
 
+  /**
+   * Sets up necessary information about the AI game
+   * @function setupAI
+   * @memberof AIGameBoardView
+   */
   setupAI(){
     this.AIBoard = this.makeAIBoard(this.options.numberOfShips);//I assume options.numberOfShips is 1-6 and not 1-21 for the number of cells
     this.lastHitShip = null;
@@ -150,13 +155,18 @@ class AIGameBoardView extends View {
     return (this.AIBoard[row][col] == 'x');
   }
 
+  /**
+   * function to have AI shoot at your board based on the difficulty of the game
+   * @function AIGuess
+   * @memberof AIGameBoardView
+   */
   AIGuess(){
     const board = this.playerBoard;
     var lastHitRow, lastHitColumn;
     if(this.options.difficulty == 'easy'){
       var playerCells = board.cells.flat().filter(
         (cell) => cell.children[0].disabled == false
-      );//list of all the ships we haven't shot at yet
+      );//list of all the cells we haven't shot at yet
       var guessCellNum = Math.floor(Math.random()*playerCells.length);
       (playerCells)[guessCellNum].children[0].disabled = true;
     }
@@ -165,7 +175,7 @@ class AIGameBoardView extends View {
       if(this.lastHitShip == null){
         var playerCells = board.cells.flat().filter(
           (cell) => cell.children[0].disabled == false
-        );//list of all the ships we haven't shot at yet
+        );//list of all the cells we haven't shot at yet
         var guessCellNum = Math.floor(Math.random()*playerCells.length);
         if((playerCells)[guessCellNum].classList.contains('ship')){
           this.lastHitShip = (playerCells)[guessCellNum];
