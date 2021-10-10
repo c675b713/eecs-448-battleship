@@ -78,6 +78,11 @@ class AIGameBoardView extends View {
     return AIShips;
   }
 
+  setupAI(){
+    this.AIBoard = this.makeAIBoard(this.options.numberOfShips);//I assume options.numberOfShips is 1-6 and not 1-21 for the number of cells
+    this.lastHitShip = null;
+  }
+
   /**
    * Renders a defined view into a container. Passes in necessary, predefined
    * render parameters.
@@ -236,6 +241,7 @@ class AIGameBoardView extends View {
     this.dialog.innerHTML = `<h2>${message}</h2>`;
     if(player == 'player'){
       this.AIGuess();
+      this.turn('opponent');
     }
     if(player === 'opponent'){
       this.container.setAttribute('data-focus', player);
@@ -400,11 +406,6 @@ class AIGameBoardView extends View {
         win: playerCanWin,
       }).render(this.container);
     return win;
-  }
-
-  setupAI(){
-    this.AIBoard = this.makeAIBoard(this.options.numberOfShips);//I assume options.numberOfShips is 1-6 and not 1-21 for the number of cells
-    this.lastHitShip = null;
   }
 
   /**   
