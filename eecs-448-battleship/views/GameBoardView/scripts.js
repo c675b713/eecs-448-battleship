@@ -1,5 +1,4 @@
 'use strict';
-
 // The name of this view
 // Later, to render this view, call:
 // new GameBoardView(options).render(this.container)
@@ -16,7 +15,11 @@ class GameBoardView extends View {
     super(options);
     this.totalCells = shipCellCount(this.options.numberOfShips);
   }
-
+  
+  /*playSound(url) {
+    const audio = new Audio(url);
+    audio.play();
+  }*/
   /**
    * Renders a defined view into a container. Passes in necessary, predefined
    * render parameters.
@@ -29,8 +32,9 @@ class GameBoardView extends View {
     // Container would be populated with elements from index.html
     container
   ) {
-    await super.render(container);
-
+    await super.render(container);    
+    this.shipMissSound = document.querySelector("audio");
+    
     this.container.setAttribute('data-focus', 'dialog');
 
     /* Render your board */
@@ -141,13 +145,22 @@ class GameBoardView extends View {
       'Yes!',
       'no.',
       (isHit) => {
-        if (isHit) cell.classList.add('ship');
+        if (isHit){
+          var audio = new Audio('../../lib/audio/shipFire.mp3');
+          audio.play();
+          cell.classList.add('ship');
+        } 
         this.addBorder();
-        if (!isHit || !this.checkWin('opponent')) this.turn('player');
+        if (!isHit || !this.checkWin('opponent')) {
+          var audio = new Audio('../../lib/audio/shipMiss.mp3');
+          audio.play();
+          this.turn('player');
+          
+      }
       }
     );
   }
-
+  
   /**   
    * Find ship on gameboard
    * @function findShip
@@ -249,10 +262,12 @@ class GameBoardView extends View {
         (cell) => cell.classList.contains('ship') && cell.children[0].disabled
       ).length;
     const win = this.totalCells === discoveredShips;
-    if (win)
+    if (win) {
+      // play sound here
       new GameOverView({
         win: playerCanWin,
       }).render(this.container);
+    }
     return win;
   }
 
